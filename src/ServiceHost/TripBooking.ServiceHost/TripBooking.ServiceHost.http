@@ -1,0 +1,6 @@
+@TripBooking.ServiceHost_HostAddress = http://localhost:5126
+
+GET {{TripBooking.ServiceHost_HostAddress}}/users/
+Accept: application/json
+
+###
