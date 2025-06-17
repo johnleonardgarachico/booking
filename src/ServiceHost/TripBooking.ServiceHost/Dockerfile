@@ -2,29 +2,13 @@
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER $APP_UID
+
+USER root
+
+EXPOSE 5126
+
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
 
+COPY . /app/
 
-# This stage is used to build the service project
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["ServiceHost/TripBooking.ServiceHost/TripBooking.ServiceHost.csproj", "ServiceHost/TripBooking.ServiceHost/"]
-RUN dotnet restore "./ServiceHost/TripBooking.ServiceHost/TripBooking.ServiceHost.csproj"
-COPY . .
-WORKDIR "/src/ServiceHost/TripBooking.ServiceHost"
-RUN dotnet build "./TripBooking.ServiceHost.csproj" -c $BUILD_CONFIGURATION -o /app/build
-
-# This stage is used to publish the service project to be copied to the final stage
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./TripBooking.ServiceHost.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "TripBooking.ServiceHost.dll"]

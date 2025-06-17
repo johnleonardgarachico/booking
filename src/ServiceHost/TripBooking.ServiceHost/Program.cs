@@ -16,14 +16,22 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    // For Container Testing Purpose: Put this back when live
+    /*app.UseSwagger();
+    app.UseSwaggerUI();*/
 }
+
+// Remove on Live
+app.UseSwagger();
+app.UseSwaggerUI();
+// Remove on Live
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+
 
 app.Run();

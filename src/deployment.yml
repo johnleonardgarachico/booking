@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tripbooking-api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: TripBooking.ServiceHost
+  template:
+    metadata:
+      labels:
+        app: TripBooking.ServiceHost
+    spec:
+      containers:
+        - name: my-container
+          image: my-image:latest
+          imagePullPolicy: Never # This will forces the minikube to pull image from the local machine
+          ports:
+            - containerPort: 5126
